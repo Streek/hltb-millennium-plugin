@@ -20,6 +20,12 @@ Key responsibilities:
 
 Uses an obfuscated CSS class name to find the game page container. This may break on Steam updates, but other plugins use a similar approach.
 
+### HLTB Sorting in the Library
+
+The library injector adds enabled Main Story, Main + Extras, and Completionist time options to Steam's native **Sort By** menu. Each option sorts shortest-to-longest. A master sorting setting and per-metric settings control which options are available. The active sort reorders the existing Steam library rows. Rows without a matching HLTB time remain visible after rows with known times. HLTB data is fetched only after an HLTB sort is selected, with a small concurrency limit; ordering updates as results arrive.
+
+The sort-menu and comparator patches target Steam's internal rendering and may need adjustment after Steam UI updates. While an HLTB sort is active, the plugin substitutes its comparator only for Steam's native `CompareSortAs` sort over app-overview arrays. Other native sorts are unchanged. HLTB sorting applies to the main library grid; it does not reorder Steam's left navigation list.
+
 ## Store Page (Webkit)
 
 Entry point: `webkit/index.tsx`

@@ -15,6 +15,7 @@ A [Millennium](https://steambrew.app/) plugin that displays [How Long To Beat](h
   - Main Story
   - Main + Extras
   - Completionist
+- Adds HLTB completion-time options to Steam's native Library **Sort By** menu, sorted shortest-to-longest
 - Works in both Desktop and Big Picture modes
 - Caches results to disk, optionally clear via the settings page
 - Click "View Details" to open the full HLTB page
@@ -35,6 +36,8 @@ A [Millennium](https://steambrew.app/) plugin that displays [How Long To Beat](h
 ## Usage
 
 Once installed, HLTB data automatically appears on game pages in your Steam library and on store pages. Simply click on any game to see its completion times.
+
+In a Library collection or showcase with Steam's **Sort By** menu, choose an HLTB option to sort by Main Story, Main + Extras, or Completionist time. Games without a matching HLTB time remain after games with known times while the plugin loads data.
 
 ## How It Works
 
@@ -57,6 +60,8 @@ Access settings via Steam menu > Millennium Library Manager > HLTB for Steam.
 
 Library view:
 - Show in Library (default = true): Show or hide HLTB data in the library
+- Enable HLTB Sorting (default = true): Show HLTB metrics in Steam's native Library Sort By menu
+- Main Story Time, Main + Extras Time, Completionist Time (default = true): Enable or disable each HLTB sorting metric
 - Horizontal/Vertical Offset (default = 0): Offset from the aligned edge, useful for avoiding Steam UI elements
 - Align to Right / Align to Bottom (default = true): Position the box on the header image
 - Show View Details Link (default = true): Toggle the link to the HLTB game page

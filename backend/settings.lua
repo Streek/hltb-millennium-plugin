@@ -14,6 +14,10 @@ M.DEFAULTS = {
     verticalOffset = 0,
     storePosition = "achievements",
     showStoreViewDetails = true,
+    librarySortEnabled = true,
+    sortByMainStory = true,
+    sortByMainPlusExtras = true,
+    sortByCompletionist = true,
 }
 
 local function get_settings_path()

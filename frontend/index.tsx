@@ -9,6 +9,7 @@ import { removeStyles } from './display/styles';
 import { removeExistingDisplay } from './display/components';
 import { getSettings, saveSettings, initSettings } from './services/settings';
 import { initializeIdCache } from './services/hltbApi';
+import { setupLibrarySort, disconnectLibrarySort } from './injection/librarySort';
 
 const GetCacheStats = callable<[], string>('GetCacheStats');
 const ClearCacheRpc = callable<[], string>('ClearCache');
@@ -38,6 +39,10 @@ const SettingsContent = () => {
   const [alignBottom, setAlignBottom] = useState(true);
   const [storePosition, setStorePosition] = useState('achievements');
   const [showStoreViewDetails, setShowStoreViewDetails] = useState(true);
+  const [librarySortEnabled, setLibrarySortEnabled] = useState(true);
+  const [sortByMainStory, setSortByMainStory] = useState(true);
+  const [sortByMainPlusExtras, setSortByMainPlusExtras] = useState(true);
+  const [sortByCompletionist, setSortByCompletionist] = useState(true);
 
   useEffect(() => {
     const settings = getSettings();
@@ -50,6 +55,10 @@ const SettingsContent = () => {
     setAlignBottom(settings.alignBottom);
     setStorePosition(settings.storePosition);
     setShowStoreViewDetails(settings.showStoreViewDetails);
+    setLibrarySortEnabled(settings.librarySortEnabled);
+    setSortByMainStory(settings.sortByMainStory);
+    setSortByMainPlusExtras(settings.sortByMainPlusExtras);
+    setSortByCompletionist(settings.sortByCompletionist);
   }, []);
 
   const onShowInLibraryChange = async (checked: boolean) => {
@@ -61,6 +70,15 @@ const SettingsContent = () => {
   const onShowInStoreChange = async (checked: boolean) => {
     setShowInStore(checked);
     await saveSettings({ ...getSettings(), showInStore: checked });
+  };
+
+  const onLibrarySortSettingChange = async (
+    key: 'librarySortEnabled' | 'sortByMainStory' | 'sortByMainPlusExtras' | 'sortByCompletionist',
+    checked: boolean,
+    setValue: (value: boolean) => void,
+  ) => {
+    setValue(checked);
+    await saveSettings({ ...getSettings(), [key]: checked });
   };
 
   const onStorePositionChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -210,6 +228,43 @@ const SettingsContent = () => {
           style={{ width: '20px', height: '20px' }}
         />
       </Field>
+      <div style={{ ...sectionHeaderStyle, paddingTop: '20px' }}>Library Sorting</div>
+      <div style={sectionDescStyle}>Adds enabled HLTB sorts to Steam’s native Sort By menu</div>
+      <Field label="Enable HLTB Sorting" bottomSeparator="standard">
+        <input
+          type="checkbox"
+          checked={librarySortEnabled}
+          onChange={(e) => onLibrarySortSettingChange('librarySortEnabled', e.target.checked, setLibrarySortEnabled)}
+          style={{ width: '20px', height: '20px' }}
+        />
+      </Field>
+      <Field label="Main Story Time" bottomSeparator="standard">
+        <input
+          type="checkbox"
+          checked={sortByMainStory}
+          disabled={!librarySortEnabled}
+          onChange={(e) => onLibrarySortSettingChange('sortByMainStory', e.target.checked, setSortByMainStory)}
+          style={{ width: '20px', height: '20px' }}
+        />
+      </Field>
+      <Field label="Main + Extras Time" bottomSeparator="standard">
+        <input
+          type="checkbox"
+          checked={sortByMainPlusExtras}
+          disabled={!librarySortEnabled}
+          onChange={(e) => onLibrarySortSettingChange('sortByMainPlusExtras', e.target.checked, setSortByMainPlusExtras)}
+          style={{ width: '20px', height: '20px' }}
+        />
+      </Field>
+      <Field label="Completionist Time" bottomSeparator="standard">
+        <input
+          type="checkbox"
+          checked={sortByCompletionist}
+          disabled={!librarySortEnabled}
+          onChange={(e) => onLibrarySortSettingChange('sortByCompletionist', e.target.checked, setSortByCompletionist)}
+          style={{ width: '20px', height: '20px' }}
+        />
+      </Field>
 
       {/* Store View */}
       <div style={{ ...sectionHeaderStyle, paddingTop: '28px' }}>Store View</div>
@@ -284,11 +339,13 @@ export default definePlugin(() => {
         removeExistingDisplay(currentDocument);
       }
       disconnectObserver();
+      disconnectLibrarySort();
     }
 
     currentDocument = doc;
     currentUIMode = mode;
     setupObserver(doc, mode);
+    setupLibrarySort(doc);
     exposeDebugTools(doc);
 
     // Initialize ID cache in background (non-blocking)

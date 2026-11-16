@@ -66,6 +66,10 @@ describe("settings", function()
             assert.equals(0, result.verticalOffset)
             assert.equals("achievements", result.storePosition)
             assert.equals(true, result.showStoreViewDetails)
+            assert.equals(true, result.librarySortEnabled)
+            assert.equals(true, result.sortByMainStory)
+            assert.equals(true, result.sortByMainPlusExtras)
+            assert.equals(true, result.sortByCompletionist)
         end)
 
         it("preserves provided values", function()
@@ -101,12 +105,20 @@ describe("settings", function()
                 showViewDetails = false,
                 alignRight = false,
                 alignBottom = false,
+                librarySortEnabled = false,
+                sortByMainStory = false,
+                sortByMainPlusExtras = false,
+                sortByCompletionist = false,
             })
             assert.equals(false, result.showInLibrary)
             assert.equals(false, result.showInStore)
             assert.equals(false, result.showViewDetails)
             assert.equals(false, result.alignRight)
             assert.equals(false, result.alignBottom)
+            assert.equals(false, result.librarySortEnabled)
+            assert.equals(false, result.sortByMainStory)
+            assert.equals(false, result.sortByMainPlusExtras)
+            assert.equals(false, result.sortByCompletionist)
         end)
     end)
 
